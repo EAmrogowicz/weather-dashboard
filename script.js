@@ -1,8 +1,6 @@
 let pastSearches = [];
 const currentDay = ` (${moment().format("DD/MM/YYYY")})`;
 
-const forecastDay1 = moment().add(1, "days").format("DD/MM/YYYY");
-
 function appendSearch(search) {
   const pastSearchesNo = 2;
 
@@ -51,6 +49,7 @@ function cityWeather(city) {
       "src",
       "http://openweathermap.org/img/wn/" + weather.icon + "@2x.png"
     );
+    weatherOverview.addClass("img-icon");
 
     const cityLabel = $("<h2>").text(weather.city + currentDay);
     cityLabel.append(weatherOverview);
@@ -83,6 +82,14 @@ function cityForecast(city) {
         humidity: response.list[i].main.humidity,
       };
 
+      const forecastDay1 = moment().add(i, "days").format("DD/MM/YYYY");
+
+      const weatherOverview = $("<img>").attr(
+        "src",
+        "http://openweathermap.org/img/wn/" + forecast.icon + "@2x.png"
+      );
+      weatherOverview.addClass("img-icon");
+
       const forecastDiv = $("<div>").addClass("forecast-div");
       const forecastDate = $("<h3>").text(forecastDay1);
 
@@ -91,7 +98,13 @@ function cityForecast(city) {
       const humidityP = $("<p>").text(`Humidity: ${forecast.humidity} %`);
 
       $(".forecast-container").append(forecastDiv);
-      forecastDiv.append(forecastDate, tempP, windP, humidityP);
+      forecastDiv.append(
+        forecastDate,
+        weatherOverview,
+        tempP,
+        windP,
+        humidityP
+      );
     }
 
     const forecastLabel = $("<h3>").text("5-Day Forecast:");

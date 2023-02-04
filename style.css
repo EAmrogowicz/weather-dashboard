@@ -14,7 +14,7 @@
 
 body {
   font-family: "Open Sans", sans-serif;
-  font-size: 16px;
+  font-size: 1rem;
   line-height: 1;
 }
 
@@ -98,7 +98,11 @@ body {
 /*  TODAY SECTION ************************ */
 h2 {
   text-transform: capitalize;
-  margin-bottom: 1.6rem;
+}
+
+.img-icon {
+  width: 60px;
+  height: 60px;
 }
 
 /*  FORECAST SECTION ************************ */
@@ -123,6 +127,8 @@ h3 {
   background-color: var(--shade);
   padding: 0.8rem;
   color: var(--tint);
+  width: 12.8rem;
+  font-size: 0.8rem;
 }
 
 /*  FOOTER ************************ */
