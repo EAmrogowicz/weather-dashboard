@@ -7,25 +7,12 @@ function displayForecast(city) {
   $("#today").empty();
   $("#forecast").empty();
 
-  // if (cityWeather(city)) {
-  //   cityForecast(city);
-  //   appendSearch(city);
-  // } else {
-  //   return;
-  // }
-
   cityWeather(city);
   cityForecast(city);
   appendSearch(city);
 }
 
-function handleIncorrectCity(city) {
-  const cityLabel = $("<h2>").text("Error");
-  $("#today").append(cityLabel);
-}
-
 function appendSearch(search) {
-  console.log("search");
   const pastSearchesNo = 5;
 
   const index = pastSearches.indexOf(search);
@@ -69,9 +56,6 @@ function cityWeather(city) {
     method: "GET",
   })
     .then(function (response) {
-      console.log("weathe");
-      console.log(response);
-
       const weather = {
         city: response.city.name,
         icon: response.list[0].weather[0].icon,
@@ -94,7 +78,7 @@ function cityWeather(city) {
       $("#today").append(cityLabel, tempP, windP, humidityP);
     })
     .catch(function (errResponse) {
-      const cityLabel = $("<h3>").text("This is not a city. Try Again");
+      const cityLabel = $("<h3>").text("Incorrect city name. Try Again!");
       $("#today").append(cityLabel);
     });
 }
@@ -113,7 +97,6 @@ function cityForecast(city) {
     url: queryURL,
     method: "GET",
   }).then(function (response) {
-    console.log("forecast");
     const forecastLabel = $("<h3>").text("5-Day Forecast:");
     const forecastResults = $("<div>").addClass("forecast-container");
     $("#forecast").prepend(forecastLabel, forecastResults);
