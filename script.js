@@ -1,13 +1,28 @@
 let pastSearches = [];
 const currentDay = ` (${moment().format("DD/MM/YYYY")})`;
 
-const cityExample = "London";
+const currentCity = "London";
+
+function displayForecast(city) {
+  $("#today").empty();
+  $("#forecast").empty();
+
+  cityWeather(city);
+  cityForecast(city);
+
+  appendSearch(city);
+}
 
 function appendSearch(search) {
   const pastSearchesNo = 5;
 
-  if (pastSearches.length === pastSearchesNo) {
-    pastSearches.pop();
+  const index = pastSearches.indexOf(search);
+  if (index > -1) {
+    pastSearches.splice(index, 1);
+  } else {
+    if (pastSearches.length === pastSearchesNo) {
+      pastSearches.pop();
+    }
   }
 
   pastSearches.unshift(search);
@@ -17,6 +32,12 @@ function appendSearch(search) {
   for (let i = 0; i < pastSearches.length; i++) {
     let lastSearch = $("<button>").text(pastSearches[i]);
     lastSearch.attr("class", "pastSearchBtn");
+
+    lastSearch.on("click", function (event) {
+      event.preventDefault();
+      displayForecast(lastSearch.text());
+    });
+
     $("#history").append(lastSearch);
   }
 }
@@ -113,22 +134,15 @@ function cityForecast(city) {
   });
 }
 
-cityWeather(cityExample);
-cityForecast(cityExample);
+cityWeather(currentCity);
+cityForecast(currentCity);
 
 $("#searchBtn").on("click", function (event) {
   event.preventDefault();
 
   // retrieve user search input text
   const searchInput = $("#searchInput").val();
-
-  $("#today").empty();
-  $("#forecast").empty();
-
-  cityWeather(searchInput);
-  cityForecast(searchInput);
-
   $("#searchInput").val("");
 
-  appendSearch(searchInput);
+  displayForecast(searchInput);
 });
