@@ -7,13 +7,25 @@ function displayForecast(city) {
   $("#today").empty();
   $("#forecast").empty();
 
+  // if (cityWeather(city)) {
+  //   cityForecast(city);
+  //   appendSearch(city);
+  // } else {
+  //   return;
+  // }
+
   cityWeather(city);
   cityForecast(city);
-
   appendSearch(city);
 }
 
+function handleIncorrectCity(city) {
+  const cityLabel = $("<h2>").text("Error");
+  $("#today").append(cityLabel);
+}
+
 function appendSearch(search) {
+  console.log("search");
   const pastSearchesNo = 5;
 
   const index = pastSearches.indexOf(search);
@@ -55,30 +67,36 @@ function cityWeather(city) {
   $.ajax({
     url: queryURL,
     method: "GET",
-  }).then(function (response) {
-    console.log(response);
+  })
+    .then(function (response) {
+      console.log("weathe");
+      console.log(response);
 
-    const weather = {
-      city: response.city.name,
-      icon: response.list[0].weather[0].icon,
-      temp: response.list[0].main.temp,
-      wind: response.list[0].wind.speed,
-      humidity: response.list[0].main.humidity,
-    };
+      const weather = {
+        city: response.city.name,
+        icon: response.list[0].weather[0].icon,
+        temp: response.list[0].main.temp,
+        wind: response.list[0].wind.speed,
+        humidity: response.list[0].main.humidity,
+      };
 
-    const weatherOverview = $("<img>").attr(
-      "src",
-      "http://openweathermap.org/img/wn/" + weather.icon + "@2x.png"
-    );
-    weatherOverview.addClass("img-icon");
+      const weatherOverview = $("<img>").attr(
+        "src",
+        "http://openweathermap.org/img/wn/" + weather.icon + "@2x.png"
+      );
+      weatherOverview.addClass("img-icon");
 
-    const cityLabel = $("<h2>").text(weather.city + currentDay);
-    cityLabel.append(weatherOverview);
-    const tempP = $("<p>").text(`Temp: ${weather.temp} °C`);
-    const windP = $("<p>").text(`Wind: ${weather.wind} KPH`);
-    const humidityP = $("<p>").text(`Humidity: ${weather.humidity} %`);
-    $("#today").append(cityLabel, tempP, windP, humidityP);
-  });
+      const cityLabel = $("<h2>").text(weather.city + currentDay);
+      cityLabel.append(weatherOverview);
+      const tempP = $("<p>").text(`Temp: ${weather.temp} °C`);
+      const windP = $("<p>").text(`Wind: ${weather.wind} KPH`);
+      const humidityP = $("<p>").text(`Humidity: ${weather.humidity} %`);
+      $("#today").append(cityLabel, tempP, windP, humidityP);
+    })
+    .catch(function (errResponse) {
+      const cityLabel = $("<h3>").text("This is not a city. Try Again");
+      $("#today").append(cityLabel);
+    });
 }
 
 function cityForecast(city) {
@@ -95,6 +113,7 @@ function cityForecast(city) {
     url: queryURL,
     method: "GET",
   }).then(function (response) {
+    console.log("forecast");
     const forecastLabel = $("<h3>").text("5-Day Forecast:");
     const forecastResults = $("<div>").addClass("forecast-container");
     $("#forecast").prepend(forecastLabel, forecastResults);
