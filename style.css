@@ -37,11 +37,11 @@ body {
 }
 
 .section {
-  padding: 1rem;
   margin-top: 1rem;
 }
 
 .section-border {
+  padding: 1rem;
   border: 1px solid var(--shade);
   border-radius: 4px;
 }
@@ -76,6 +76,53 @@ body {
   color: var(--shade);
   background-color: var(--accent);
   transition: all 0.3s ease-in;
+}
+
+.pastSearchBtn {
+  display: block;
+  text-transform: uppercase;
+  text-align: center;
+  color: var(--shade);
+  background-color: var(--tint);
+  margin-top: 0.4rem;
+  padding: 0.8rem;
+  width: 100%;
+  border: none;
+  border-radius: 4px;
+}
+
+.pastSearchBtn:hover {
+  background-color: var(--accent);
+}
+
+/*  TODAY SECTION ************************ */
+h2 {
+  text-transform: capitalize;
+  margin-bottom: 1.6rem;
+}
+
+/*  FORECAST SECTION ************************ */
+.forecast-section {
+  margin-top: 2rem;
+}
+
+h3 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.forecast-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.forecast-div {
+  background-color: var(--shade);
+  padding: 0.8rem;
+  color: var(--tint);
 }
 
 /*  FOOTER ************************ */
