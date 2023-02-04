@@ -20,7 +20,7 @@ body {
 
 .container-md {
   border-radius: 4px;
-  padding: 0;
+  padding: 0 1rem;
   margin-bottom: 2.4rem;
 }
 
@@ -116,22 +116,20 @@ h3 {
   letter-spacing: 1px;
 }
 
-.forecast-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 1rem;
+.row {
+  padding: 0;
+  margin: -0.4rem;
 }
 
 .forecast-div {
   background-color: var(--shade);
   padding: 0.8rem;
   color: var(--tint);
-  width: 12.8rem;
   font-size: 0.8rem;
+  margin: 0.4rem;
 }
 
-/*  FOOTER ************************ */
+/* FOOTER ************************ */
 .footer {
   border-top: 1px solid var(--shade);
   color: var(--shade);

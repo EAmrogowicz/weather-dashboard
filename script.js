@@ -98,7 +98,7 @@ function cityForecast(city) {
     method: "GET",
   }).then(function (response) {
     const forecastLabel = $("<h3>").text("5-Day Forecast:");
-    const forecastResults = $("<div>").addClass("forecast-container");
+    const forecastResults = $("<div>").addClass("row");
     $("#forecast").prepend(forecastLabel, forecastResults);
 
     for (let i = 1; i < 6; i++) {
@@ -117,14 +117,14 @@ function cityForecast(city) {
       );
       weatherOverview.addClass("img-icon");
 
-      const forecastDiv = $("<div>").addClass("forecast-div");
+      const forecastDiv = $("<div>").addClass("col forecast-div");
       const forecastDate = $("<h3>").text(forecastDay1);
 
       const tempP = $("<p>").text(`Temp: ${forecast.temp} °C`);
       const windP = $("<p>").text(`Wind: ${forecast.wind} KPH`);
       const humidityP = $("<p>").text(`Humidity: ${forecast.humidity} %`);
 
-      $(".forecast-container").append(forecastDiv);
+      forecastResults.append(forecastDiv);
       forecastDiv.append(
         forecastDate,
         weatherOverview,
