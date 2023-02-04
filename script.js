@@ -1,8 +1,10 @@
 let pastSearches = [];
 const currentDay = ` (${moment().format("DD/MM/YYYY")})`;
 
+const cityExample = "London";
+
 function appendSearch(search) {
-  const pastSearchesNo = 2;
+  const pastSearchesNo = 5;
 
   if (pastSearches.length === pastSearchesNo) {
     pastSearches.pop();
@@ -18,8 +20,6 @@ function appendSearch(search) {
     $("#history").append(lastSearch);
   }
 }
-
-let citySearch = "London";
 
 function cityWeather(city) {
   const APIKey = "ac05d0f083a97fd76b0305bca7bb2db8";
@@ -74,6 +74,10 @@ function cityForecast(city) {
     url: queryURL,
     method: "GET",
   }).then(function (response) {
+    const forecastLabel = $("<h3>").text("5-Day Forecast:");
+    const forecastResults = $("<div>").addClass("forecast-container");
+    $("#forecast").prepend(forecastLabel, forecastResults);
+
     for (let i = 1; i < 6; i++) {
       const forecast = {
         icon: response.list[i].weather[0].icon,
@@ -106,41 +110,25 @@ function cityForecast(city) {
         humidityP
       );
     }
-
-    const forecastLabel = $("<h3>").text("5-Day Forecast:");
-    $("#forecast").prepend(forecastLabel);
   });
 }
 
-cityWeather(citySearch);
-cityForecast(citySearch);
+cityWeather(cityExample);
+cityForecast(cityExample);
 
 $("#searchBtn").on("click", function (event) {
   event.preventDefault();
 
-  const APIKey = "ac05d0f083a97fd76b0305bca7bb2db8";
-
   // retrieve user search input text
   const searchInput = $("#searchInput").val();
 
-  const queryURL =
-    "http://api.openweathermap.org/geo/1.0/direct?q=" +
-    searchInput +
-    "&appid=" +
-    APIKey +
-    "&units=metric";
+  $("#today").empty();
+  $("#forecast").empty();
 
-  $.ajax({
-    url: queryURL,
-    method: "GET",
-  }).then(function (response) {
-    console.log(response);
-    //
-    //
-  });
+  cityWeather(searchInput);
+  cityForecast(searchInput);
 
   $("#searchInput").val("");
 
   appendSearch(searchInput);
-  printSearch(searchInput);
 });
