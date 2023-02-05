@@ -1,5 +1,5 @@
 let userSearches = [];
-const currentDay = ` (${moment().format("DD/MM/YYYY")})`;
+const currentDay = moment().format("dddd, Do MMMM YYYY");
 const APIKey = "ac05d0f083a97fd76b0305bca7bb2db8";
 
 // example city when the page load, before first user search
@@ -63,12 +63,14 @@ function cityWeather(city) {
     method: "GET",
   })
     .then(function (response) {
+      console.log(response);
       // get weather data for called city
       const weather = {
         city: response.city.name,
+        country: response.city.country,
         icon: response.list[0].weather[0].icon,
-        temp: response.list[0].main.temp,
-        wind: response.list[0].wind.speed,
+        temp: Math.round(response.list[0].main.temp),
+        wind: Math.round(response.list[0].wind.speed),
         humidity: response.list[0].main.humidity,
       };
 
@@ -78,13 +80,14 @@ function cityWeather(city) {
       );
       weatherOverview.addClass("img-icon");
 
-      const cityLabel = $("<h2>").text(weather.city + currentDay);
+      const cityLabel = $("<h2>").text(weather.city + ", " + weather.country);
       cityLabel.append(weatherOverview);
+      const currentDate = $("<h3>").text(currentDay);
       const tempP = $("<p>").text(`Temp: ${weather.temp} °C`);
       const windP = $("<p>").text(`Wind: ${weather.wind} KPH`);
       const humidityP = $("<p>").text(`Humidity: ${weather.humidity} %`);
 
-      $("#today").append(cityLabel, tempP, windP, humidityP);
+      $("#today").append(cityLabel, currentDate, tempP, windP, humidityP);
     })
     // display error massage if the search is undefined
     .catch(function (errResponse) {
@@ -114,12 +117,12 @@ function cityForecast(city) {
       // get weather data for called city
       const forecast = {
         icon: response.list[i].weather[0].icon,
-        temp: response.list[i].main.temp,
-        wind: response.list[i].wind.speed,
+        temp: Math.round(response.list[i].main.temp),
+        wind: Math.round(response.list[i].wind.speed),
         humidity: response.list[i].main.humidity,
       };
       // use moment js to retrieve dates
-      const forecastDay1 = moment().add(i, "days").format("DD/MM/YYYY");
+      const forecastDay1 = moment().add(i, "days").format("ddd, Do MMM");
 
       const weatherOverview = $("<img>").attr(
         "src",
@@ -135,8 +138,8 @@ function cityForecast(city) {
 
       forecastResults.append(forecastDiv);
       forecastDiv.append(
-        forecastDate,
         weatherOverview,
+        forecastDate,
         tempP,
         windP,
         humidityP
