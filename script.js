@@ -2,50 +2,54 @@ let userSearches = [];
 const currentDay = ` (${moment().format("DD/MM/YYYY")})`;
 const APIKey = "ac05d0f083a97fd76b0305bca7bb2db8";
 
-// example city when the web load, before first user search
+// example city when the page load, before first user search
 const currentCity = "London";
+// define max search number visible on screen
+const pastSearchesNo = 5;
 
+// update weather condition based on the user search
 function displayWeather(city) {
-  // clear html sections
+  // clear current day and forecast sections
   $("#today").empty();
   $("#forecast").empty();
   // call functions to get today and forecast weather
   cityWeather(city);
   cityForecast(city);
-  // print user searches on screen/ user history
+  // display user searches on screen/ user history
   appendSearch(city);
 }
 
+// update user search history section
 function appendSearch(search) {
-  // define max search number visible on screen
-  const pastSearchesNo = 5;
-  // check if new search saved in history and move to the top
+  // check if new search is saved already in history section
+  // if yes move this search to the top
   const index = userSearches.indexOf(search);
   if (index > -1) {
     userSearches.splice(index, 1);
   } else {
     if (userSearches.length === pastSearchesNo) {
+      // if number of user searches is equal as defined globally, remove last element from array
       userSearches.pop();
     }
   }
-  // add value to the start of an userSearch array
+  // adds new user search to the top of the list
   userSearches.unshift(search);
-  // clear user search history before re-print loop/creates new buttons
+  // clear user search history before it can display new searches
   $("#history").empty();
-  // creates button
+  // creates search history section/ buttons
   for (let i = 0; i < userSearches.length; i++) {
     let lastSearch = $("<button>").text(userSearches[i]);
     lastSearch.attr("class", "pastSearchBtn");
-    // on click event - user click button of one of the past searches
+    // click past search - display again current and future conditions for that city
     lastSearch.on("click", function (event) {
       event.preventDefault();
       displayWeather(lastSearch.text());
     });
-    // append button to html
     $("#history").append(lastSearch);
   }
 }
 
+// present current city weather - performs ajax request
 function cityWeather(city) {
   const queryURL =
     "http://api.openweathermap.org/data/2.5/forecast?q=" +
@@ -59,7 +63,7 @@ function cityWeather(city) {
     method: "GET",
   })
     .then(function (response) {
-      // object with all weather data for called city
+      // get weather data for called city
       const weather = {
         city: response.city.name,
         icon: response.list[0].weather[0].icon,
@@ -67,28 +71,29 @@ function cityWeather(city) {
         wind: response.list[0].wind.speed,
         humidity: response.list[0].main.humidity,
       };
-      // creates img with weather icon
+
       const weatherOverview = $("<img>").attr(
         "src",
         "http://openweathermap.org/img/wn/" + weather.icon + "@2x.png"
       );
       weatherOverview.addClass("img-icon");
-      // creates new el with weather data
+
       const cityLabel = $("<h2>").text(weather.city + currentDay);
       cityLabel.append(weatherOverview);
       const tempP = $("<p>").text(`Temp: ${weather.temp} °C`);
       const windP = $("<p>").text(`Wind: ${weather.wind} KPH`);
       const humidityP = $("<p>").text(`Humidity: ${weather.humidity} %`);
-      // append all elements to html
+
       $("#today").append(cityLabel, tempP, windP, humidityP);
     })
-    // if the city name is incorrect, display error massage
+    // display error massage if the search is undefined
     .catch(function (errResponse) {
       const cityLabel = $("<h3>").text("Incorrect city name. Try Again!");
       $("#today").append(cityLabel);
     });
 }
 
+// present forecast weather for the city - performs ajax request
 function cityForecast(city) {
   const queryURL =
     "http://api.openweathermap.org/data/2.5/forecast?q=" +
@@ -101,34 +106,33 @@ function cityForecast(city) {
     url: queryURL,
     method: "GET",
   }).then(function (response) {
-    // prepend title and section box to html
     const forecastLabel = $("<h3>").text("5-Day Forecast:");
     const forecastResults = $("<div>").addClass("row");
     $("#forecast").prepend(forecastLabel, forecastResults);
 
     for (let i = 1; i < 6; i++) {
-      // object with all weather data for called city
+      // get weather data for called city
       const forecast = {
         icon: response.list[i].weather[0].icon,
         temp: response.list[i].main.temp,
         wind: response.list[i].wind.speed,
         humidity: response.list[i].main.humidity,
       };
-      // list days based on the moment js
+      // use moment js to retrieve dates
       const forecastDay1 = moment().add(i, "days").format("DD/MM/YYYY");
-      // creates img with weather icon
+
       const weatherOverview = $("<img>").attr(
         "src",
         "http://openweathermap.org/img/wn/" + forecast.icon + "@2x.png"
       );
       weatherOverview.addClass("img-icon");
-      // creates new el with weather data
+
       const forecastDiv = $("<div>").addClass("col forecast-div");
       const forecastDate = $("<h3>").text(forecastDay1);
       const tempP = $("<p>").text(`Temp: ${forecast.temp} °C`);
       const windP = $("<p>").text(`Wind: ${forecast.wind} KPH`);
       const humidityP = $("<p>").text(`Humidity: ${forecast.humidity} %`);
-      // append all elements to html
+
       forecastResults.append(forecastDiv);
       forecastDiv.append(
         forecastDate,
@@ -141,11 +145,11 @@ function cityForecast(city) {
   });
 }
 
-// call and get data for London when the web load, before first user search
+// call and get data for example city when the web load, before first user search
 cityWeather(currentCity);
 cityForecast(currentCity);
 
-// search button on click function
+// search onclick handler
 $("#searchBtn").on("click", function (event) {
   event.preventDefault();
 
@@ -153,6 +157,6 @@ $("#searchBtn").on("click", function (event) {
   const searchInput = $("#searchInput").val();
   //clear search input box
   $("#searchInput").val("");
-
+  // update weather condition based on the user search
   displayWeather(searchInput);
 });
