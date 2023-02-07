@@ -52,7 +52,7 @@ function appendSearch(search) {
 // present current city weather - performs ajax request
 function cityWeather(city) {
   const queryURL =
-    "http://api.openweathermap.org/data/2.5/forecast?q=" +
+    "https://api.openweathermap.org/data/2.5/forecast?q=" +
     city +
     "&appid=" +
     APIKey +
@@ -99,7 +99,7 @@ function cityWeather(city) {
 // present forecast weather for the city - performs ajax request
 function cityForecast(city) {
   const queryURL =
-    "http://api.openweathermap.org/data/2.5/forecast?q=" +
+    "https://api.openweathermap.org/data/2.5/forecast?q=" +
     city +
     "&appid=" +
     APIKey +
