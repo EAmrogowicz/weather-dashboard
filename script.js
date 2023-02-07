@@ -76,7 +76,7 @@ function cityWeather(city) {
 
       const weatherOverview = $("<img>").attr(
         "src",
-        "http://openweathermap.org/img/wn/" + weather.icon + "@2x.png"
+        "https://openweathermap.org/img/wn/" + weather.icon + "@2x.png"
       );
       weatherOverview.addClass("img-icon");
 
@@ -126,7 +126,7 @@ function cityForecast(city) {
 
       const weatherOverview = $("<img>").attr(
         "src",
-        "http://openweathermap.org/img/wn/" + forecast.icon + "@2x.png"
+        "https://openweathermap.org/img/wn/" + forecast.icon + "@2x.png"
       );
       weatherOverview.addClass("img-icon");
 
