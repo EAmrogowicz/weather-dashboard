@@ -63,7 +63,6 @@ function cityWeather(city) {
     method: "GET",
   })
     .then(function (response) {
-      console.log(response);
       // get weather data for called city
       const weather = {
         city: response.city.name,
